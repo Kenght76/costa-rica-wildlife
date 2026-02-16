@@ -651,143 +651,117 @@ export default function App() {
             left: 0,
             width: '100%',
             height: '100%',
-            objectFit: 'cover',
-            objectPosition: 'top center',
+            objectFit: 'fill',
+            objectPosition: 'center center',
           }}
         />
 
-        {/* Tap zones — positioned relative to visible image area */}
-        {(() => {
-          // Image is 1350x3000. With objectFit: cover + top center,
-          // the image fills width and crops from bottom.
-          // Tap zone positions are expressed as % of the original image dimensions,
-          // then converted to viewport % based on how much image is visible.
-          
-          // On any screen, image width fills 100%. Visible height = screenAspect / imageAspect * 100%.
-          // Image aspect = 1350/3000 = 0.45
-          // For a phone at 0.46 aspect, visibleImageHeight = 0.46/0.45 = 1.022 → sees ~100% of image
-          // For a phone at 0.50 aspect, visibleImageHeight = 0.50/0.45 = 1.11 → sees ~90% of image
-          // Tap zone at imageY% maps to viewportY% = imageY / visibleFraction
-          
-          const imgW = 1350, imgH = 3000;
-          const imgAspect = imgW / imgH; // 0.45
-          const screenAspect = typeof window !== 'undefined' ? window.innerWidth / window.innerHeight : 0.46;
-          const visibleFraction = Math.min(1, imgAspect / screenAspect); // fraction of image height visible
-          
-          // Convert image-space Y% to viewport Y%
-          const toVP = (imgYPct) => imgYPct * visibleFraction;
-          // Convert image-space height% to viewport height%
-          const toVPH = (imgHPct) => imgHPct * visibleFraction;
-          
-          return (
-            <>
-              {/* Enter the Jungle — in image space: top ~45%, left 1% */}
-              <button
-                onClick={() => playIntroFor('jungle')}
-                style={{
-                  position: 'absolute',
-                  top: `${toVP(45)}%`,
-                  left: '1%',
-                  width: '49%',
-                  height: `${toVPH(5)}%`,
-                  background: 'transparent',
-                  border: 'none',
-                  cursor: 'pointer',
-                  borderRadius: 8,
-                  transition: 'all 0.2s ease',
-                  zIndex: 10,
-                }}
-                onMouseEnter={(e) => e.target.style.background = 'rgba(46, 139, 87, 0.2)'}
-                onMouseLeave={(e) => e.target.style.background = 'transparent'}
-                aria-label="Enter the Jungle"
-              />
+        {/* Tap zones — positioned as % of viewport, matching image */}
 
-              {/* Hit the Beach — in image space: top ~61%, left 50% */}
-              <button
-                onClick={() => playIntroFor('beach')}
-                style={{
-                  position: 'absolute',
-                  top: `${toVP(61)}%`,
-                  left: '50%',
-                  width: '47%',
-                  height: `${toVPH(7.5)}%`,
-                  background: 'transparent',
-                  border: 'none',
-                  cursor: 'pointer',
-                  borderRadius: 8,
-                  transition: 'all 0.2s ease',
-                  zIndex: 10,
-                }}
-                onMouseEnter={(e) => e.target.style.background = 'rgba(79, 195, 247, 0.2)'}
-                onMouseLeave={(e) => e.target.style.background = 'transparent'}
-                aria-label="Hit the Beach"
-              />
+        {/* Enter the Jungle */}
+        <button
+          onClick={() => playIntroFor('jungle')}
+          style={{
+            position: 'absolute',
+            top: '45%',
+            left: '1%',
+            width: '49%',
+            height: '5%',
+            background: 'transparent',
+            border: 'none',
+            cursor: 'pointer',
+            borderRadius: 8,
+            transition: 'all 0.2s ease',
+            zIndex: 10,
+          }}
+          onMouseEnter={(e) => e.target.style.background = 'rgba(46, 139, 87, 0.2)'}
+          onMouseLeave={(e) => e.target.style.background = 'transparent'}
+          aria-label="Enter the Jungle"
+        />
 
-              {/* Artifacts — in image space: bottom ~11% = top ~86% */}
-              <button
-                onClick={() => playIntroFor('artifacts')}
-                style={{
-                  position: 'absolute',
-                  top: `${toVP(86)}%`,
-                  left: '6%',
-                  width: '26%',
-                  height: `${toVPH(3.5)}%`,
-                  background: 'transparent',
-                  border: 'none',
-                  cursor: 'pointer',
-                  borderRadius: 8,
-                  transition: 'all 0.2s ease',
-                  zIndex: 10,
-                }}
-                onMouseEnter={(e) => e.target.style.background = 'rgba(255, 255, 255, 0.1)'}
-                onMouseLeave={(e) => e.target.style.background = 'transparent'}
-                aria-label="Artifacts"
-              />
+        {/* Hit the Beach */}
+        <button
+          onClick={() => playIntroFor('beach')}
+          style={{
+            position: 'absolute',
+            top: '61%',
+            left: '50%',
+            width: '47%',
+            height: '7.5%',
+            background: 'transparent',
+            border: 'none',
+            cursor: 'pointer',
+            borderRadius: 8,
+            transition: 'all 0.2s ease',
+            zIndex: 10,
+          }}
+          onMouseEnter={(e) => e.target.style.background = 'rgba(79, 195, 247, 0.2)'}
+          onMouseLeave={(e) => e.target.style.background = 'transparent'}
+          aria-label="Hit the Beach"
+        />
 
-              {/* Moments — in image space: bottom ~11% = top ~86% */}
-              <button
-                onClick={() => playIntroFor('moments')}
-                style={{
-                  position: 'absolute',
-                  top: `${toVP(86)}%`,
-                  left: '36%',
-                  width: '28%',
-                  height: `${toVPH(3.5)}%`,
-                  background: 'transparent',
-                  border: 'none',
-                  cursor: 'pointer',
-                  borderRadius: 8,
-                  transition: 'all 0.2s ease',
-                  zIndex: 10,
-                }}
-                onMouseEnter={(e) => e.target.style.background = 'rgba(255, 255, 255, 0.1)'}
-                onMouseLeave={(e) => e.target.style.background = 'transparent'}
-                aria-label="Moments"
-              />
+        {/* Artifacts — bottom left */}
+        <button
+          onClick={() => playIntroFor('artifacts')}
+          style={{
+            position: 'absolute',
+            bottom: '11%',
+            left: '6%',
+            width: '26%',
+            height: '3.5%',
+            background: 'transparent',
+            border: 'none',
+            cursor: 'pointer',
+            borderRadius: 8,
+            transition: 'all 0.2s ease',
+            zIndex: 10,
+          }}
+          onMouseEnter={(e) => e.target.style.background = 'rgba(255, 255, 255, 0.1)'}
+          onMouseLeave={(e) => e.target.style.background = 'transparent'}
+          aria-label="Artifacts"
+        />
 
-              {/* Journal/Export — in image space: bottom ~11% = top ~86% */}
-              <button
-                onClick={() => playIntroFor('memories')}
-                style={{
-                  position: 'absolute',
-                  top: `${toVP(86)}%`,
-                  right: '6%',
-                  width: '26%',
-                  height: `${toVPH(3.5)}%`,
-                  background: 'transparent',
-                  border: 'none',
-                  cursor: 'pointer',
-                  borderRadius: 8,
-                  transition: 'all 0.2s ease',
-                  zIndex: 10,
-                }}
-                onMouseEnter={(e) => e.target.style.background = 'rgba(255, 255, 255, 0.1)'}
-                onMouseLeave={(e) => e.target.style.background = 'transparent'}
-                aria-label="Export"
-              />
-            </>
-          );
-        })()}
+        {/* Moments — bottom center */}
+        <button
+          onClick={() => playIntroFor('moments')}
+          style={{
+            position: 'absolute',
+            bottom: '11%',
+            left: '36%',
+            width: '28%',
+            height: '3.5%',
+            background: 'transparent',
+            border: 'none',
+            cursor: 'pointer',
+            borderRadius: 8,
+            transition: 'all 0.2s ease',
+            zIndex: 10,
+          }}
+          onMouseEnter={(e) => e.target.style.background = 'rgba(255, 255, 255, 0.1)'}
+          onMouseLeave={(e) => e.target.style.background = 'transparent'}
+          aria-label="Moments"
+        />
+
+        {/* Export — bottom right — navigates to Journal */}
+        <button
+          onClick={() => playIntroFor('memories')}
+          style={{
+            position: 'absolute',
+            bottom: '11%',
+            right: '6%',
+            width: '26%',
+            height: '3.5%',
+            background: 'transparent',
+            border: 'none',
+            cursor: 'pointer',
+            borderRadius: 8,
+            transition: 'all 0.2s ease',
+            zIndex: 10,
+          }}
+          onMouseEnter={(e) => e.target.style.background = 'rgba(255, 255, 255, 0.1)'}
+          onMouseLeave={(e) => e.target.style.background = 'transparent'}
+          aria-label="Export"
+        />
 
         {/* Intro Video Overlay */}
         {playingIntro && (
